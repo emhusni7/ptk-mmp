@@ -2,12 +2,12 @@
 	session_start();
 	ini_set("date.timezone","Asia/Jakarta");
 	ini_set('max_execution_time', 0); //300 seconds = 5 minutes
-	$db1 = new PDO('mysql:host=192.168.10.167:3307;dbname=personalia', 'personalia', 'personalia');
+	$db1 = new PDO('mysql:host=localhost:3306;dbname=personalia', 'root', 'saya');
 	$TGL = date("Y-m-d");
 
 	function kodeAuto($namatabel,$namakolom)
 	{
-		$db1 = new PDO('mysql:host=192.168.10.167:3307;dbname=personalia', 'personalia', 'personalia');
+		$db1 = new PDO('mysql:host=localhost:3306;dbname=personalia', 'root', 'saya');
 
 		$akhir = 0;
 		$stmt  = $db1->query("select max($namakolom) as akhir from $namatabel");
@@ -23,42 +23,42 @@
 	}
 
 	function GetQuery($query){
-		$db1 = new PDO('mysql:host=192.168.10.167:3307;dbname=personalia', 'personalia', 'personalia');
+		$db1 = new PDO('mysql:host=localhost:3306;dbname=personalia', 'root', 'saya');
 		$result = $db1->prepare($query) or trigger_error(mysql_error()); 
 		$result->execute();
 		return $result;
 	}
 
 	function GetData($kolom,$from){
-		$db1 = new PDO('mysql:host=192.168.10.167:3307;dbname=personalia', 'personalia', 'personalia');
+		$db1 = new PDO('mysql:host=localhost:3306;dbname=personalia', 'root', 'saya');
 		$result = $db1->prepare("select $kolom from $from") or trigger_error(mysql_error()); 
 		$result->execute();
 		return $result;
 	}
 
 	function GetData1($kolom,$from,$where){
-		$db1 = new PDO('mysql:host=192.168.10.167:3307;dbname=personalia', 'personalia', 'personalia');
+		$db1 = new PDO('mysql:host=localhost:3306;dbname=personalia', 'root', 'saya');
 		$result = $db1->prepare("select $kolom from $from where $where") or trigger_error(mysql_error()); 
 		$result->execute();
 		return $result;
 	}
 
 	function UpdateData($from,$kolom,$where){
-		$db1 = new PDO('mysql:host=192.168.10.167:3307;dbname=personalia', 'personalia', 'personalia');
+		$db1 = new PDO('mysql:host=localhost:3306;dbname=personalia', 'root', 'saya');
 		$result = $db1->prepare("update $from set $kolom where $where") or trigger_error(mysql_error()); 
 		$result->execute();
 		return $result;
 	}
 
 	function InsertData($table,$kolom,$values){
-		$db1 = new PDO('mysql:host=192.168.10.167:3307;dbname=personalia', 'personalia', 'personalia');
+		$db1 = new PDO('mysql:host=localhost:3306;dbname=personalia', 'root', 'saya');
 		$result = $db1->prepare("insert into $table ($kolom) values ($values)") or trigger_error(mysql_error()); 
 		$result->execute();
 		return $result;
 	}
 
 	function DeleteData($table,$where){
-		$db1 = new PDO('mysql:host=192.168.10.167:3307;dbname=personalia', 'personalia', 'personalia');
+		$db1 = new PDO('mysql:host=localhost:3306;dbname=personalia', 'root', 'saya');
 		$result = $db1->prepare("delete from $table where $where") or trigger_error(mysql_error()); 
 		$result->execute();
 		return $result;
@@ -66,7 +66,7 @@
 
 	function createKode($namaTabel,$namaKolom,$awalan,$jumlahAngka)
 	{
-		$db1 = new PDO('mysql:host=192.168.10.167:3307;dbname=personalia', 'personalia', 'personalia');
+		$db1 = new PDO('mysql:host=localhost:3306;dbname=personalia', 'root', 'saya');
 		$angkaAkhir = 0;
 		
 		$stmt = $db1->query("select max(right($namaKolom,$jumlahAngka)) as akhir from $namaTabel where $namaKolom like '".$awalan."%' ");
@@ -94,7 +94,7 @@
 	    return false;;
 	}
 
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////APPROVAL REMINDER
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	$reminderday = GetQuery("select reminder from param where reminder != ''");
 	while($rowz = $reminderday->fetch(PDO::FETCH_ASSOC))
 	{
@@ -126,15 +126,16 @@
 		    require_once 'assets/phpmailer/PHPMailerAutoload.php';
 		    $mail = new PHPMailer;
 		    $mail->isSendmail();
-		    set_time_limit(120); // set the time limit to 120 seconds
+		    set_time_limit(120); // set the time limroot to 120 seconds
 		    $mail->setFrom('no-reply@megamarinepride.com','PTK Management System');
 		    $mail->addAddress($EMAIL_MGR);
+		    $mail->addCC("robbyrefta@gmail.com");
 		    $mail->Subject = "PTK Online - Approval Reminder for $SEQ";
 		    $mail->msgHTML("<h4> Dear Manager,</h4>
 		                    <p>This is auto generate email from PTK Online System that reminds approval for employee request : <h3>$SEQ</h3></p>
-		                    <h4>Please do not reply to this email, for more information : IT Department (ext. call : 150)</h4>
+		                    <h4>Please do not reply to this email, for more information : root Department (ext. call : 150)</h4>
 		                    Regards, <br>
-		                    Recruitment Team <br>
+		                    Recrurootment Team <br>
                         	PT. Mega Marine Pride");
 		    if($mail->send())
 		    {
@@ -167,15 +168,16 @@
 		    require_once 'assets/phpmailer/PHPMailerAutoload.php';
 		    $mail = new PHPMailer;
 		    $mail->isSendmail();
-		    set_time_limit(120); // set the time limit to 120 seconds
+		    set_time_limit(120); // set the time limroot to 120 seconds
 		    $mail->setFrom('no-reply@megamarinepride.com','PTK Management System');
 		    $mail->addAddress($EMAIL_DIR);
+		    $mail->addCC("robbyrefta@gmail.com");
 		    $mail->Subject = "PTK Online - Approval Reminder for $SEQ2";
 		    $mail->msgHTML("<h4> Dear Director,</h4>
 		                    <p>This is auto generate email from PTK Online System that reminds approval for employee request : <h3>$SEQ2</h3></p>
-		                    <h4>Please do not reply to this email, for more information : IT Department (ext. call : 150)</h4>
+		                    <h4>Please do not reply to this email, for more information : root Department (ext. call : 150)</h4>
 		                    Regards, <br>
-		                    Recruitment Team <br>
+		                    Recrurootment Team <br>
                         	PT. Mega Marine Pride");
 		    if($mail->send())
 		    {
@@ -199,15 +201,16 @@
 		    require_once 'assets/phpmailer/PHPMailerAutoload.php';
 		    $mail = new PHPMailer;
 		    $mail->isSendmail();
-		    set_time_limit(120); // set the time limit to 120 seconds
+		    set_time_limit(120); // set the time limroot to 120 seconds
 		    $mail->setFrom('no-reply@megamarinepride.com','PTK Management System');
 		    $mail->addAddress($EMAIL_HRD);
+		    $mail->addCC("robbyrefta@gmail.com");
 		    $mail->Subject = "PTK Online - Approval Reminder for $SEQ3";
 		    $mail->msgHTML("<h4> Dear HRD Manager,</h4>
 		                    <p>This is auto generate email from PTK Online System that reminds approval for employee request : <h3>$SEQ3</h3></p>
-		                    <h4>Please do not reply to this email, for more information : IT Department (ext. call : 150)</h4>
+		                    <h4>Please do not reply to this email, for more information : root Department (ext. call : 150)</h4>
 		                    Regards, <br>
-		                    Recruitment Team <br>
+		                    Recrurootment Team <br>
                         	PT. Mega Marine Pride");
 		    if($mail->send())
 		    {
@@ -231,15 +234,16 @@
 		    require_once 'assets/phpmailer/PHPMailerAutoload.php';
 		    $mail = new PHPMailer;
 		    $mail->isSendmail();
-		    set_time_limit(120); // set the time limit to 120 seconds
+		    set_time_limit(120); // set the time limroot to 120 seconds
 		    $mail->setFrom('no-reply@megamarinepride.com','PTK Management System');
 		    $mail->addAddress($EMAIL_MD);
+		    $mail->addCC("robbyrefta@gmail.com");
 		    $mail->Subject = "PTK Online - Approval Reminder for $SEQ4";
 		    $mail->msgHTML("<h4> Dear Managing Director,</h4>
 		                    <p>This is auto generate email from PTK Online System that reminds approval for employee request : <h3>$SEQ4</h3></p>
-		                    <h4>Please do not reply to this email, for more information : IT Department (ext. call : 150)</h4>
+		                    <h4>Please do not reply to this email, for more information : root Department (ext. call : 150)</h4>
 		                    Regards, <br>
-		                    Recruitment Team <br>
+		                    Recrurootment Team <br>
                         	PT. Mega Marine Pride");
 		    if($mail->send())
 		    {
