@@ -21,8 +21,7 @@ if(isset($_POST["seq"]))
             {
                 $submition  = $row2["qty_submition"];
                 $accepted   = $row2["qty_accepted"];
-                // $email_user = $row2["email"];
-                $email_user = "emhusni77@gmail.com";
+                $email_user = $row2["email"];
                 $nama       = $row2["nama"];
             }
             if($submition == $accepted)
