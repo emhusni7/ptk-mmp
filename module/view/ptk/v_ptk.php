@@ -36,6 +36,19 @@ $(document).ready(function() {
                     success: function(data){
                         $("#PEMENUHAN").html(data);
                     }
+                }).done(function (res){
+                  $.ajax({
+                    type: "POST",
+                    url: "sendEmail.php",
+                    data: "seq="+data.seq,
+                    encode: true
+                  }).done(function (res){
+                    if (res.success){
+                        console.log(res.message);
+                    }
+                  }).fail(function(xhr, status, error){
+                    console.log(error);
+                  })
                 });
             } else {
                 alert(data.message);
