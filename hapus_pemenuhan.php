@@ -3,9 +3,9 @@ require_once("module/model/koneksi/koneksi.php");
 
 if(!isset($_SESSION["LOGINIDUS_PERSONALIA"]))
 {
-    ?><script>alert('Silahkan login dahulu');</script><?php
-    ?><script>document.location.href='index.php';</script><?php
+    header("Location: index.php");
     die(0);
+   
 }
 
 $DINO = date('Y-m-d H:i:s');
@@ -29,22 +29,16 @@ if(isset($_GET["seq"]) && isset($_GET["urut"]))
             "log_id, description, ip_adress, user_id, created_date, created_by, module, trans_type",
             "'', 'Hapus pemenuhan $seq', '$IP_ADDRESS','$ID_USER1','$DINO','$ID_USER1','Pemenuhan PTK','Hapus'");
 
-            echo "<script type='text/javascript'>alert('Data has been deleted! Thank you! ');</script>";
-            echo "<script>document.location.href='ptk';</script>";
-            die(0);
+            echo json_encode(array("success" => true, "message" => "Data Has Been Delete"));
         }
         else
         {
-            echo "<script type='text/javascript'>alert('Error! Gagal update Qty PTK, hubungi IT ');</script>";
-            echo "<script>document.location.href='ptk';</script>";
-            die(0);
+            echo json_encode(array("success" => false, "message" => "Error! Gagal update Qty PTK, hubungi IT"));
         }
     }
     else
     {
-        echo "<script type='text/javascript'>alert('Error! Please try again ');</script>";
-        echo "<script>document.location.href='ptk';</script>";
-        die(0);
+        echo json_encode(array("success" => false, "message" => "Error! Gagal Coba Lagi"));
     }
 }
 ?>

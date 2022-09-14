@@ -2,9 +2,9 @@
 require_once("module/model/koneksi/koneksi.php");
 
 if(!isset($_SESSION["LOGINIDUS_PERSONALIA"]))
-{
-    ?><script>alert('Silahkan login dahulu');</script><?php
-    ?><script>document.location.href='index.php';</script><?php
+{   
+    session_destroy();
+    header("Location: index.php");
     die(0);
 }
 
@@ -34,16 +34,15 @@ if(isset($_POST["seq"]))
     if($qty_kekurangan > 0)
     {
         $insert = InsertData("t_fulfillment",
-                             "urut,seq,date,id_accepted,name_accepted,jenis_kelamin,created_date,created_by",
-                             "'','$seq','$date_accepted','$id_accepted','$name_accepted','$gender','$DINO','$ID_USER1'");
-
+                             "seq,date,id_accepted,name_accepted,jenis_kelamin,created_date,created_by",
+                             "'$seq','$date_accepted','$id_accepted','$name_accepted','$gender','$DINO','$ID_USER1'");
         if($insert)
         {
             $update = UpdateData("t_ptk",
                                  "qty_accepted = qty_accepted + 1, qty_left = qty_left - 1",
                                  "seq = '$seq'");
         }
-
+        
         if($update)
         {
             InsertData(
@@ -63,7 +62,8 @@ if(isset($_POST["seq"]))
             {
                 $submition  = $row2["qty_submition"];
                 $accepted   = $row2["qty_accepted"];
-                $email_user = $row2["email"];
+                // $email_user = $row2["email"];
+                $email_user = "emhusni77@gmail.com";
                 $nama       = $row2["nama"];
             }
             if($submition == $accepted)
@@ -344,15 +344,11 @@ if(isset($_POST["seq"]))
                 }
             }
         }
-        echo "<script type='text/javascript'>alert('Data has been updated!');</script>";
+        echo json_encode(array("success" => true, "message" => "Data Has Been Update", "seq" => $seq));
     }
     else
     {
-        echo "<script type='text/javascript'>alert('Error! Input melebihi jumlah kekurangan!');</script>";
+        echo json_encode(array("success" => false, "message" => "PTK Sudah Terpenuhi", "seq" => false));
     }
-    
-    ?><script>document.location.href='ptk';</script><?php
-    die(0);
-
-}
+}    
 ?>
