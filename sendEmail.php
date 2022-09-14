@@ -84,8 +84,8 @@ if(isset($_POST["seq"]))
                 $mail->setFrom('no-reply@megamarinepride.com','PTK Management System');
                 $mail->addAddress($email_user);
                 $mail->Subject = "PTK Online - Request Complete " . $seq;
-                $mail->IsHTML(true);
-                $mail->Body = "<h4> Dear $nama,</h4>
+                
+                $mail->msgHTML("<h4> Dear $nama,</h4>
                 <p>This is auto generate email from PTK Online System to inform that your employee request for :</p>
                 <table style='border-collapse:collapse'>
                 <tr>
@@ -293,8 +293,8 @@ if(isset($_POST["seq"]))
                 <h4>Please do not reply to this email, for more information : IT Department (ext. call : 150)</h4>
                 Regards, <br>
                 Recruitment Team <br>
-                PT. Mega Marine Pride";
-                #$mail->msgHTML();
+                PT. Mega Marine Pride");
+                
                 if($mail->send())
                 { 
                     echo json_encode(array("success" => true, "message" => "Data Has Been Update & Email Sended", "seq" => $seq));
