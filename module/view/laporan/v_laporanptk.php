@@ -27,7 +27,19 @@ if (isset($_POST["cari"]))
 {
     $PERIODE    = $_POST["PERIODE"];
     $PERIODE2   = $_POST["PERIODE2"];
+    if (isset($_POST["SEC"]) && $_POST['SEC'] != '0'){
+        $section = $_POST["SEC"];
+        $where_clause .= "and f.kode_section = '$section'";
+    }
+    if (isset($_POST["LEV"]) && $_POST['LEV'] != '0'){
+        $level = $_POST["LEV"];
+        $where_clause .= "and j.kode_level = '$level'";
+    }
+
+    echo $where_clause;
+     
 }
+
 ?>
 <!-- FILTER ----------------------------------------------------------------------------------->
 
@@ -48,22 +60,73 @@ if (isset($_POST["cari"]))
 <form role="form" action="" method="post">
     <div class="row" align="left">
         <div class="col-md-2">
+            <label>From</label>
         </div>
-        <div class="col-md-10">
-            <label for="PERIODE">Input Period PTK :</label>
+        <div class="col-md-2">
+            <label>To</label>
+        </div>
+        <div class="col-md-2">
+            <label>Section</label>
+        </div>
+        <div class="col-md-2">
+            <label>Level</label>
         </div>
     </div>
     <div class="row" align="center">
         <div class="col-md-2">
-        </div>
-        <div class="col-md-3">
             <div class="form-group">
                 <input type="date" class="form-control" name="PERIODE" id="PERIODE" value="<?php echo $PERIODE; ?>" />
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="form-group">
                 <input type="date" class="form-control" name="PERIODE2" id="PERIODE2" value="<?php echo $PERIODE2; ?>" />
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group" align="left">
+                <select class="form-control" id="SEC" name="SEC">
+                    <option value="0" style="background-color:lightgrey">Choose Section</option>
+                    <?php
+                    $result = GetQuery("select 
+                                               b.kode_section,
+                                               f.nama_section
+                                          from  t_ptk b 
+                                          left join m_section f ON b.kode_section = f.kode_section
+                                        WHERE (b.date_ptk BETWEEN '$PERIODE' AND '$PERIODE2') $where_clause
+                                      group by b.kode_section
+                                    order by f.nama_section asc");
+                    while ($row = $result->fetch(PDO::FETCH_ASSOC))
+                    {
+                        ?>
+                            <option value="<?=$row['kode_section'];?>"> <?=$row["nama_section"];?> </option>
+                        <?php
+                    }
+                    ?>                
+                </select>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group" align="left">
+                <select class="form-control" id="LEV" name="LEV">
+                    <option value="0" style="background-color:lightgrey">Choose Level</option>
+                    <?php
+                    $result = GetQuery("select
+                                               b.kode_level,
+                                               f.nama_level
+                                    from t_ptk b
+                                     left join m_level j ON b.kode_level = j.kode_level
+                                         WHERE (b.date_ptk BETWEEN '$PERIODE' AND '$PERIODE2') $where_clause
+                                      group by b.kode_level
+                                      order by j.nama_level asc");
+                    while ($row = $result->fetch(PDO::FETCH_ASSOC))
+                    {
+                        ?>
+                            <option value="<?=$row['kode_level'];?>"> <?=$row["nama_level"];?> </option>
+                        <?php
+                    }
+                    ?>                
+                </select>
             </div>
         </div>
         <div class="col-md-3" align="left">
