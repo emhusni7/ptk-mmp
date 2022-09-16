@@ -111,6 +111,14 @@ if (isset($_POST["cari"]))
                 <select class="form-control" id="LEV" name="LEV">
                     <option value="0" style="background-color:lightgrey">Choose Level</option>
                     <?php
+                    echo "select
+                    b.kode_level,
+                    j.nama_level
+         from t_ptk b
+          left join m_level j ON b.kode_level = j.kode_level
+              WHERE (b.date_ptk BETWEEN '$PERIODE' AND '$PERIODE2') $where_clause
+           group by b.kode_level
+           order by j.nama_level asc";
                     $result = GetQuery("select
                                                b.kode_level,
                                                f.nama_level
