@@ -6,7 +6,7 @@ $mail->isSendmail();
 set_time_limit(120); // set the time limit to 120 seconds
 
 $mail->setFrom('no-reply@megamarinepride.com','Testing Email');
-$mail->addAddress("sysdev@megamarinepride.com");
+$mail->addAddress("emhusni77@gmail.com");
 $mail->Subject = "Test Email";
 $mail->msgHTML("Test");
 
