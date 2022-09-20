@@ -5,6 +5,7 @@ require 'assets/phpmailer/PHPMailerAutoload.php';
 
 if(isset($_GET["seq"])) {
     // Fetch Row DB
+    $seq = $_GET["seq"];
     $querymd = $db1->prepare("
     select 
         mu.nama_user,
