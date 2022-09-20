@@ -55,6 +55,52 @@ if(isset($_GET["seq"]))
             ?><script>document.location.href='ptk';</script><?php
             die(0);
         }
+
+        // Fetch Row DB
+        $querymd = $db1->prepare("
+        select 
+            mu.nama_user,
+            mu.email 
+            from t_ptk_history tph
+            inner join m_user mu on mu.kode_user  = tph.created_by 
+        where 
+            tph.seq = '$seq'
+        order by 
+            tph.created_date 
+        limit 1");
+        $querymd->execute();
+        $row = $stmt->fetch();
+
+        // send Mail
+        $mail = new PHPMailer;
+        $mail->isSendmail();
+        set_time_limit(120);
+        
+        $mail->setFrom('no-reply@megamarinepride.com','PTK Closed');
+        $mail->addAddress("generalhrm@megamarinepride.com");
+        $mail->addCC("recruitment@megamarinepride.com");
+        $mail->Subject = "PTK ".$seq." Closed";
+        $message = file_get_contents("mail_template.html");
+        if (isset($row['nama_user'])){
+            $message = str_replace('%username%', "Username", $message);
+            $mail->addAddress($row['email']);
+            $mail->addCC("generalhrm@megamarinepride.com");
+            $mail->addCC("recruitment@megamarinepride.com");
+        }
+        $message = str_replace('%ptk_name%', "PTK Tes", $message);
+        $link = "http://192.168.10.167/mmp/personalia/edit_ptk?seq=".$seq;
+        $message = str_replace('%link%', $link, $message);
+        $mail->MsgHTML($message);
+
+        if($mail->send())
+        {
+            echo "Message has been";
+            ?><script>document.location.href='ptk';</script><?php
+        }
+        else
+        {
+            echo "Mailer Error: " . $mail->ErrorInfo;
+        }
     }
 }
 ?>
