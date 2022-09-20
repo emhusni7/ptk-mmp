@@ -69,7 +69,7 @@ if(isset($_GET["seq"]))
             tph.created_date 
         limit 1");
         $querymd->execute();
-        $row = $stmt->fetch();
+        $row = $querymd->fetch();
 
         // send Mail
         $mail = new PHPMailer;
