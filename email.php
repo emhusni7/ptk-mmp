@@ -33,7 +33,7 @@ if(isset($_GET["seq"])) {
         $message = str_replace('%username%', $row['nama_user'], $message);
         $mail->addAddress("emhusni77@gmail.com");
     }
-    $message = str_replace('%ptk_name%', "PTK Tes", $message);
+    $message = str_replace('%ptk_name%', $seq, $message);
     $link = "http://192.168.10.167/mmp/personalia/edit_ptk?seq=".$seq;
     $message = str_replace('%link%', $link, $message);
     $mail->MsgHTML($message);

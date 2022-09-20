@@ -87,7 +87,7 @@ if(isset($_GET["seq"]))
             $mail->addCC("generalhrm@megamarinepride.com");
             $mail->addCC("recruitment@megamarinepride.com");
         }
-        $message = str_replace('%ptk_name%', "PTK Tes", $message);
+        $message = str_replace('%ptk_name%', $seq, $message);
         $link = "http://192.168.10.167/mmp/personalia/edit_ptk?seq=".$seq;
         $message = str_replace('%link%', $link, $message);
         $mail->MsgHTML($message);
